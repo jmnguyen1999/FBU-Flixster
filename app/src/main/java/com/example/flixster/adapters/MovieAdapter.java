@@ -65,6 +65,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
         TextView tvDescription;
         ImageView ivPoster;
         RelativeLayout rvContainer;
+        TextView tvShowLink;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -73,6 +74,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
             tvDescription = binding.tvDescription;
             ivPoster = binding.ivPoster;
             rvContainer = binding.rvContainer;
+            tvShowLink = binding.tvShowLink;
         }
 
         public void bind(Movie movie, int postion) {
@@ -85,8 +87,38 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
             });
 
             //2.) Tie data to the views from this given Movie:
+
             tvTitle.setText(movie.getTitle());
             tvDescription.setText(movie.getOverview());
+            tvDescription.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    if(tvDescription.getLineCount() > 6){         //if original data --> enough to > 6 lines --> cut it off and show "more" button
+                        Log.d(TAG, "tvDescripion.getLineCount() = " + tvDescription.getLineCount());
+                        tvDescription.setMaxLines(6);
+                        tvShowLink.setVisibility(View.VISIBLE);
+
+                        //3.) show text listener:
+                        tvShowLink.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(tvShowLink.getText().toString().equals("more...")){
+                                    tvShowLink.setText("show less");
+                                    tvDescription.setMaxLines(Integer.MAX_VALUE);         //set no limit on textview to show the whole description!
+                                }
+                                else{
+                                    tvShowLink.setText("more...");
+                                    tvDescription.setMaxLines(6);
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        tvShowLink.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
 
             //2b.) Figure out which orientation in:
             if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -104,6 +136,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
                         .transform(new RoundedCornersTransformation(30, 10))
                         .into(ivPoster);
             }
+
+
         }
     }
 }

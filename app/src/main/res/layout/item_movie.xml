@@ -31,7 +31,7 @@
     <TextView
         android:id="@+id/tvDescription"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/tvTitle"
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
@@ -40,4 +40,17 @@
         android:fontFamily="serif"
         android:textColor="#FFFFFF"
         tools:text="In 1970s London amidst the punk rock revolution, a young grifter named Estella is determined to make a name for herself with her designs. She befriends a pair of young thieves who appreciate her appetite for mischief, and together they are able to build a life for themselves on the London streets. One day, Estella’s flair for fashion catches the eye of the Baroness von Hellman, a fashion legend who is devastatingly chic and terrifyingly haute. But their relationship sets in motion a course of events and revelations that will cause Estella to embrace her wicked side and become the raucous, fashionable and revenge-bent Cruella." />
+
+    <TextView
+        android:id="@+id/tvShowLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvDescription"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="30dp"
+        android:fontFamily="serif"
+        android:text="more..."
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:textStyle="italic" />
 </RelativeLayout>
