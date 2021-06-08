@@ -14,7 +14,6 @@ public class MovieDBClient {
     private static final String MOVIE_API_KEY ="61bde20d47417bf3a0adf1ab1eb5b898";
     private static final String BASE_URL="https://api.themoviedb.org/3/";
 
-    private static final String YOUTUBE_API_KEY= "AIzaSyAWq6FD7HNjxKYVkbsGJ9IZSoF63hFVLLk";
     //Endpoints neccessary;
     private static final String NOW_PLAYING_ENDPOINT="movie/now_playing?api_key=";
     private static final String CONFIGURATION_ENDPOINT="configuration?api_key=";
