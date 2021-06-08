@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.flixster.R;
+import com.example.flixster.databinding.ItemMovieBinding;
 import com.example.flixster.models.Movie;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
 
     List<Movie> movies;
     Context context;
+    ItemMovieBinding binding;
 
     private OnClickListener onClickListener;
     public interface OnClickListener{
@@ -42,7 +44,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
 
     @Override
     public MovieAdapter.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
+        binding = ItemMovieBinding.inflate(LayoutInflater.from(context), parent, false);
+        View view = binding.getRoot();
         return new MovieAdapter.ViewHolder(view);
     }
 
@@ -66,10 +69,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
 
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
-            ivPoster = itemView.findViewById(R.id.ivPoster);
-            rvContainer = itemView.findViewById(R.id.rvContainer);
+            tvTitle = binding.tvTitle;
+            tvDescription = binding.tvDescription;
+            ivPoster = binding.ivPoster;
+            rvContainer = binding.rvContainer;
         }
 
         public void bind(Movie movie, int postion) {

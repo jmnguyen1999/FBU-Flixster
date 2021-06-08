@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.flixster.R;
+import com.example.flixster.databinding.ActivityDetailBinding;
 import com.example.flixster.models.Movie;
 
 import org.parceler.Parcels;
@@ -26,13 +27,17 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
 
-        //1.) Connect Views:
-        ivTrailer = findViewById(R.id.ivTrailer);
-        tvTitle = findViewById(R.id.tvDetailTitle);
-        tvOverview = findViewById(R.id.tvDetailOverview);
-        ratingBar = findViewById(R.id.ratingBar);
+        //1.) Initialize our layout (taken care of by the auto-generated ActivityHomeBinding class)
+        // all views in activity_home.xml are stored as fields now!
+        ActivityDetailBinding binding = ActivityDetailBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());          //getRoot() --> returns layout file
+
+        //1b.) Connect Views:
+        ivTrailer = binding.ivTrailer;
+        tvTitle = binding.tvDetailTitle;
+        tvOverview = binding.tvDetailOverview;
+        ratingBar = binding.ratingBar;
 
         //2.) Get data from HomeActivity:
         Movie movie = Parcels.unwrap(getIntent().getParcelableExtra(KEY_MOVIE_RECEIVED));

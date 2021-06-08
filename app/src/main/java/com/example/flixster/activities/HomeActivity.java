@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.flixster.R;
 import com.example.flixster.adapters.MovieAdapter;
+import com.example.flixster.databinding.ActivityHomeBinding;
 import com.example.flixster.models.Movie;
 import com.example.flixster.network.MovieDBClient;
 
@@ -41,11 +41,13 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //1.) Initialize our layout (taken care of by the auto-generated ActivityHomeBinding class)
+        // all views in activity_home.xml are stored as fields now!
+        ActivityHomeBinding binder = ActivityHomeBinding.inflate(getLayoutInflater());
+        setContentView(binder.getRoot());       //getRoot() --> returns layout file
 
-        //1.) Initializations:
         movies = new ArrayList<>();
-        rvMovies = findViewById(R.id.rvMovies);
+        rvMovies = binder.rvMovies;
 
         //2.) Create an MovieAdapter.OnclickListener object to go into the constructor + instantiate a MoviesAdapter object:
         MovieAdapter.OnClickListener onClickListener = new MovieAdapter.OnClickListener() {
