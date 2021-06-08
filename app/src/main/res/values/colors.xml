@@ -10,4 +10,6 @@
     <color name="blue">#2980B9 </color>
     <color name="opaque_blue">#402980B9</color>
     <color name="gray">#80AEB6BF </color>
+    <color name="blue_background">#2E4053</color>
+    <color name="divider_color">#5D6D7E</color>
 </resources>
