@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//
 //Purpose:          To encapsulate all relevant information aout each movie. Can parse out information given a JSONObject representing a movie.
 public class Movie {
     private static final String TAG = "Movie";
