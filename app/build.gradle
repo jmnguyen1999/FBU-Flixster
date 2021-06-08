@@ -47,4 +47,8 @@ dependencies {
 
     //For RecyclerView:
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
+    //For Parceler --> used to package + send Movie objects across intents:
+    implementation 'org.parceler:parceler-api:1.1.12'
+    annotationProcessor 'org.parceler:parceler:1.1.12'
 }

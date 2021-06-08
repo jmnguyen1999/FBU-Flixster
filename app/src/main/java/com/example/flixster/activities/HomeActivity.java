@@ -1,5 +1,6 @@
-package com.example.flixster;
+package com.example.flixster.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.example.flixster.R;
 import com.example.flixster.adapters.MovieAdapter;
 import com.example.flixster.models.Movie;
 import com.example.flixster.network.MovieDBClient;
@@ -15,6 +17,7 @@ import com.example.flixster.network.MovieDBClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,7 @@ import okhttp3.Headers;
  */
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
+    private static final String KEY_MOVIE_SEND = "movieMoreDetail";     //key used to send a Movie to DetailActivity
 
     private List<Movie> movies;
     private String posterSize = "";
@@ -39,20 +43,34 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //1.) Initializations:
         movies = new ArrayList<>();
-
         rvMovies = findViewById(R.id.rvMovies);
-        movieAdapter = new MovieAdapter(this, movies);
+
+        //2.) Create an MovieAdapter.OnclickListener object to go into the constructor + instantiate a MoviesAdapter object:
+        MovieAdapter.OnClickListener onClickListener = new MovieAdapter.OnClickListener() {
+            @Override
+            public void onClick(int position) {
+                //When a movie row is clicked --> go to DetailActivity!
+                Intent toDetailActivity = new Intent(HomeActivity.this, DetailActivity.class);
+
+                //Get the movies at the position that was clicked, wrap it up, and put it into this Intent instance:
+                toDetailActivity.putExtra(KEY_MOVIE_SEND, Parcels.wrap(movies.get(position)));
+                startActivity(toDetailActivity);
+            }
+        };
+        movieAdapter = new MovieAdapter(this, movies, onClickListener);
+
+        //3.) Set up the RecyclerView:
         rvMovies.setAdapter(movieAdapter);
         rvMovies.setLayoutManager(new LinearLayoutManager(this));
 
-        //fetchMovies();
+        //4.) Fetch movie and image size data!
         fetchImageSizes();
     }
 
+    //Purpose:          Makes a request for current now playing movies using a static method from MovieDBClient. Passes in the result to a static method in Movies to parse the JSON data into a List<Movie> instead. Assumes posterSize and backdropSize are initialized.
     public void fetchMovies(){
-        //fetchImageSizes();          //initializes posterSize and backdropSize fields
-
         MovieDBClient.makeNowPlayingReqest(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int i, Headers headers, JSON json) {

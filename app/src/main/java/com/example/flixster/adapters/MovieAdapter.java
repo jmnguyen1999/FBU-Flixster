@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,9 +26,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
     List<Movie> movies;
     Context context;
 
-    public MovieAdapter(Context context, List<Movie> movies){
+    private OnClickListener onClickListener;
+    public interface OnClickListener{
+        void onClick(int position);
+    }
+
+    public MovieAdapter(Context context, List<Movie> movies, OnClickListener onClickListener){
         this.context = context;
         this.movies = movies;
+        this.onClickListener = onClickListener;
     }
 
     @Override
@@ -39,7 +46,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull @NotNull MovieAdapter.ViewHolder holder, int position) {
         Movie movie = movies.get(position);
-        holder.bind(movie);
+        holder.bind(movie, position);
     }
 
     @Override
@@ -48,10 +55,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-
         TextView tvTitle;
         TextView tvDescription;
         ImageView ivPoster;
+        RelativeLayout rvContainer;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -59,13 +66,23 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             ivPoster = itemView.findViewById(R.id.ivPoster);
+            rvContainer = itemView.findViewById(R.id.rvContainer);
         }
 
-        public void bind(Movie movie) {
+        public void bind(Movie movie, int postion) {
+            //1.) Tie a Click listener to the entire container --> onClick() in the MovieAdapter.OnClickListener:
+            rvContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickListener.onClick(postion);
+                }
+            });
+
+            //2.) Tie data to the views from this given Movie:
             tvTitle.setText(movie.getTitle());
             tvDescription.setText(movie.getOverview());
 
-            // Figure out which orientation in:
+            //2b.) Figure out which orientation in:
             if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 Glide.with(context).load(movie.getPosterPath()).placeholder(R.drawable.flicks_movie_placeholder).into(ivPoster);
             } else {
