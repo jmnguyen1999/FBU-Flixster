@@ -7,7 +7,7 @@
 
     <ImageView
         android:id="@+id/ivPoster"
-        android:layout_width="130dp"
+        android:layout_width="280dp"
         android:layout_height="170dp"
         android:adjustViewBounds="true"
         android:cropToPadding="false"

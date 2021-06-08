@@ -21,6 +21,10 @@ import java.util.List;
 
 import okhttp3.Headers;
 
+/**
+ * HomeActivity.java
+ * Purpose:             This is the main screen of the app to display the list of movies!
+ */
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
 
@@ -42,11 +46,12 @@ public class HomeActivity extends AppCompatActivity {
         rvMovies.setAdapter(movieAdapter);
         rvMovies.setLayoutManager(new LinearLayoutManager(this));
 
-        fetchMovies();
+        //fetchMovies();
+        fetchImageSizes();
     }
 
     public void fetchMovies(){
-        fetchImageSizes();          //initializes posterSize and backdropSize fields
+        //fetchImageSizes();          //initializes posterSize and backdropSize fields
 
         MovieDBClient.makeNowPlayingReqest(new JsonHttpResponseHandler() {
             @Override
@@ -94,7 +99,7 @@ public class HomeActivity extends AppCompatActivity {
                     backdropSize = allBackdropSizes.get(allBackdropSizes.length()/2).toString();
                     Log.d(TAG, "posterSize = " + posterSize + "   backdropSize = " + backdropSize);
 
-
+                    fetchMovies();
                 } catch (JSONException e) {
                     Log.e(TAG, "error getting arrays =", e);
                 }
