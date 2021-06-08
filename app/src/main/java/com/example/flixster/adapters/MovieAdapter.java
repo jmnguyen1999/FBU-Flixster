@@ -26,6 +26,10 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
     private static final String TAG = "MovieAdapter";
+    private static final int MAX_LINES = 6;
+    private static final int ROUNDED_RADIUS = 30;
+    private static final int ROUNDED_MARGINS_PORTRAIT = 5;
+    private static final int ROUNDED_MARGINS_LANDSCAPE = 10;
 
     List<Movie> movies;
     Context context;
@@ -87,16 +91,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
             });
 
             //2.) Tie data to the views from this given Movie:
-
             tvTitle.setText(movie.getTitle());
             tvDescription.setText(movie.getOverview());
-            tvDescription.post(new Runnable() {
-                @Override
-                public void run() {
 
-                    if(tvDescription.getLineCount() > 6){         //if original data --> enough to > 6 lines --> cut it off and show "more" button
+            //2b.) Check if the tvDescription is too long (i.e > 6 lines) --> display a "more..."/"show less" button ("tvShowLink" field) + tie onclickListener
+            tvDescription.post(new Runnable() {
+                @Override                       //This method is just needed to call getLineCount()
+                public void run() {
+                    if(tvDescription.getLineCount() > MAX_LINES){         //if original data --> enough to > 6 lines --> cut it off and show "more" button
                         Log.d(TAG, "tvDescripion.getLineCount() = " + tvDescription.getLineCount());
-                        tvDescription.setMaxLines(6);
+                        tvDescription.setMaxLines(MAX_LINES);
                         tvShowLink.setVisibility(View.VISIBLE);
 
                         //3.) show text listener:
@@ -109,7 +113,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
                                 }
                                 else{
                                     tvShowLink.setText("more...");
-                                    tvDescription.setMaxLines(6);
+                                    tvDescription.setMaxLines(MAX_LINES);
                                 }
                             }
                         });
@@ -126,14 +130,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
                 Glide.with(context)
                         .load(movie.getPosterPath())
                         .placeholder(R.drawable.flicks_movie_placeholder)
-                        .transform(new RoundedCornersTransformation(30, 5))
-                                .into(ivPoster);
+                        .transform(new RoundedCornersTransformation(ROUNDED_RADIUS, ROUNDED_MARGINS_PORTRAIT))
+                        .into(ivPoster);
             } else {
                 Log.d(TAG, "backdrop path = " + movie.getBackdropPath());
                 Glide.with(context)
                         .load(movie.getBackdropPath())
                         .placeholder(R.drawable.flicks_backdrop_placeholder)
-                        .transform(new RoundedCornersTransformation(30, 10))
+                        .transform(new RoundedCornersTransformation(ROUNDED_RADIUS, ROUNDED_MARGINS_LANDSCAPE))
                         .into(ivPoster);
             }
 

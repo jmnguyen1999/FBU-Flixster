@@ -18,7 +18,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Flixster">
-        <activity android:name=".activities.DetailActivity"></activity>
+
+        <!-- "configChanges" so activity does not restart everytime fullscreen is pushed on YoutubePlayerView -->
+        <activity
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:name=".activities.DetailActivity"/>
         <activity android:name=".activities.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

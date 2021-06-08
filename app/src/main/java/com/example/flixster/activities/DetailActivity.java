@@ -2,6 +2,7 @@ package com.example.flixster.activities;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ public class DetailActivity extends YouTubeBaseActivity {
     TextView tvTitle;
     TextView tvOverview;
     RatingBar ratingBar;
+    ImageView ivPlayButton;
     YouTubePlayerView youtubePlayerView;
 
     @Override
@@ -50,7 +52,9 @@ public class DetailActivity extends YouTubeBaseActivity {
         tvTitle = binding.tvDetailTitle;
         tvOverview = binding.tvDetailOverview;
         ratingBar = binding.ratingBar;
+        ivPlayButton = binding.ivPlayButton;
         youtubePlayerView = binding.youtubePlayer;
+        youtubePlayerView.setVisibility(View.INVISIBLE);            //by default --> hide the actual youtubePlayerView to only display the ivTrailer and ivPlayButton
 
         //2.) Get data from HomeActivity:
         Movie movie = Parcels.unwrap(getIntent().getParcelableExtra(KEY_MOVIE_RECEIVED));
@@ -61,26 +65,38 @@ public class DetailActivity extends YouTubeBaseActivity {
         tvOverview.setText(movie.getOverview());
         ratingBar.setRating((float) movie.getRating());
 
-        //4.) Make a request to find all trailers for this movie --> initialize youtuubePlayerView with video
-        String movieId = movie.getId();
-        MovieDBClient.makeVideoRequest(movieId, new JsonHttpResponseHandler() {
+        //4) Set listener on play button --> show the youtubePlayerView, get needed info, start the trailer
+        ivPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSuccess(int i, Headers headers, JSON json) {
-                JSONObject receivedJson= json.jsonObject;
-                try{
-                    JSONArray results = receivedJson.getJSONArray("results");
-                    //Just get the first video --> Official trailer:
-                    JSONObject officialTrailer = (JSONObject) results.get(0);
-                    String trailerKey = officialTrailer.getString("key");
-                    initializeYoutubePlayer(trailerKey);
-                }catch(JSONException e){
-                    Log.e(TAG, "exception for getting list of videos for movie id = " + movieId, e);
-                }
-            }
+            public void onClick(View v) {
+                //4a.) Toggle visibilites (yes, play button and ivTrailer will no longer be visible)
+                youtubePlayerView.setVisibility(View.VISIBLE);
+                ivTrailer.setVisibility(View.INVISIBLE);
+                ivPlayButton.setVisibility(View.INVISIBLE);
 
-            @Override
-            public void onFailure(int i, Headers headers, String s, Throwable throwable) {
-                Log.e(TAG, "Failed to get list of videos", throwable);
+                //4b.) Make a request to find all trailers for this movie --> initialize youtubePlayerView with video
+                String movieId = movie.getId();
+                MovieDBClient.makeVideoRequest(movieId, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int i, Headers headers, JSON json) {
+                        JSONObject receivedJson= json.jsonObject;
+                        try{
+                            JSONArray results = receivedJson.getJSONArray("results");
+
+                            //Just get the first video --> Official trailer:
+                            JSONObject officialTrailer = (JSONObject) results.get(0);
+                            String trailerKey = officialTrailer.getString("key");
+                            initializeYoutubePlayer(trailerKey);
+                        }catch(JSONException e){
+                            Log.e(TAG, "exception for getting list of videos for movie id = " + movieId, e);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int i, Headers headers, String s, Throwable throwable) {
+                        Log.e(TAG, "Failed to get list of videos", throwable);
+                    }
+                });
             }
         });
     }
@@ -91,7 +107,7 @@ public class DetailActivity extends YouTubeBaseActivity {
                 new YouTubePlayer.OnInitializedListener() {
                     @Override
                     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-                        youTubePlayer.cueVideo(videoKey);       //cueVideo() --> loads but doesn't play automatically
+                        youTubePlayer.loadVideo(videoKey);       //loadVideo() --> loads the video and plays it automatically
                     }
                     @Override
                     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
