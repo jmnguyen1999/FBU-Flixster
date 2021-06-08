@@ -22,6 +22,7 @@ public class Movie {
     double rating;
     String posterSize;
     String backdropSize;
+    String id;
 
     public Movie(){}        //required for Parceler
 
@@ -37,6 +38,7 @@ public class Movie {
         title = jsonObject.getString("title");
         overview = jsonObject.getString("overview");
         rating = jsonObject.getDouble("vote_average");
+        id = jsonObject.getString("id");
     }
 
     //Purpose:      Take a JSONArray to create and return a list of Movies. This is static so the HomeActivity can call this.
@@ -67,4 +69,5 @@ public class Movie {
         return overview;
     }
     public double getRating(){ return rating;}
+    public String getId(){ return id;}
 }

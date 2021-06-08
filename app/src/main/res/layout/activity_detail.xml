@@ -14,6 +14,11 @@
         android:scaleType="fitXY"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
+    <com.google.android.youtube.player.YouTubePlayerView
+        android:id="@+id/youtubePlayer"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"/>
+
     <View
         android:id="@+id/topDivider"
         style="@style/Divider.Horizontal"
