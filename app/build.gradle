@@ -51,4 +51,9 @@ dependencies {
     //For Parceler --> used to package + send Movie objects across intents:
     implementation 'org.parceler:parceler-api:1.1.12'
     annotationProcessor 'org.parceler:parceler:1.1.12'
+
+    //For Glide Transformations --> rounded corners on images
+    implementation 'jp.wasabeef:glide-transformations:4.1.0'
+    // If you want to use the GPU Filters
+    implementation 'jp.co.cyberagent.android:gpuimage:2.0.4'
 }

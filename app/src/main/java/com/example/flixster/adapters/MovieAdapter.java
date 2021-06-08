@@ -2,6 +2,7 @@ package com.example.flixster.adapters;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import com.example.flixster.models.Movie;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
     private static final String TAG = "MovieAdapter";
@@ -84,9 +87,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
 
             //2b.) Figure out which orientation in:
             if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                Glide.with(context).load(movie.getPosterPath()).placeholder(R.drawable.flicks_movie_placeholder).into(ivPoster);
+                Log.d(TAG, "poster path = " + movie.getPosterPath());
+                Glide.with(context)
+                        .load(movie.getPosterPath())
+                        .placeholder(R.drawable.flicks_movie_placeholder)
+                        .transform(new RoundedCornersTransformation(30, 5))
+                                .into(ivPoster);
             } else {
-                Glide.with(context).load(movie.getBackdropPath()).placeholder(R.drawable.flicks_backdrop_placeholder).into(ivPoster);
+                Log.d(TAG, "backdrop path = " + movie.getBackdropPath());
+                Glide.with(context)
+                        .load(movie.getBackdropPath())
+                        .placeholder(R.drawable.flicks_backdrop_placeholder)
+                        .transform(new RoundedCornersTransformation(30, 10))
+                        .into(ivPoster);
             }
         }
     }
